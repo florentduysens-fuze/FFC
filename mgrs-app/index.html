@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>FFC</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+
+  <h1>FFC</h1>
+
+  <!-- RÉGLAGES -->
+  <section>
+    <h2>Réglages</h2>
+
+    <label>Mode de calcul OA</label>
+    <select id="oaMode">
+      <option value="flat" selected>Plan local (exercices)</option>
+      <option value="real">Mode réel (géographique)</option>
+    </select>
+
+    <label>Type d’azimut</label>
+    <select id="azimutType">
+      <option value="grille" selected>Azimut quadrillage</option>
+      <option value="vrai">Azimut vrai</option>
+    </select>
+  </section>
+
+  <!-- SECTION POSN MOR / OBJ -->
+  <section>
+    <h2>Posn Mor → Obj</h2>
+
+    <label>Posn Mor (MGRS)</label>
+    <div class="row">
+      <input id="posn_mor" placeholder="31U DQ 12345 67890">
+      <button onclick="useGPS()">GPS</button>
+    </div>
+
+    <label>Obj (MGRS)</label>
+    <input id="obj_main" placeholder="31U DQ 22345 77890">
+
+    <button class="main" onclick="compute()">Calculer</button>
+
+    <p id="error"></p>
+    <div id="result"></div>
+  </section>
+
+  <!-- SECTION OA -->
+  <section>
+    <h2>Observateur Avancé (OA)</h2>
+
+    <label>Coordonnée OA (MGRS)</label>
+    <input id="oa_mgrs" placeholder="31U DQ 12345 67890">
+
+    <label>Azimut OA (millièmes)</label>
+    <input id="oa_azimut" type="number" placeholder="ex : 1600">
+
+    <label>Obj (MGRS)</label>
+    <input id="obj_oa" placeholder="31U DQ 22345 77890">
+
+    <div class="row">
+      <div class="col">
+        <label>Correction G/D (m)</label>
+        <div class="toggle-group">
+          <button type="button" id="btnG" onclick="setLatSign(-1)">G</button>
+          <button type="button" id="btnD" onclick="setLatSign(1)">D</button>
+        </div>
+        <input id="oa_lat" type="number" placeholder="ex : 50">
+      </div>
+
+      <div class="col">
+        <label>Correction PL/PR (m)</label>
+        <div class="toggle-group">
+          <button type="button" id="btnLoin" onclick="setRangeSign(1)">+ Loin</button>
+          <button type="button" id="btnPres" onclick="setRangeSign(-1)">+ Près</button>
+        </div>
+        <input id="oa_range" type="number" placeholder="ex : 100">
+      </div>
+    </div>
+
+    <button class="main" onclick="applyOACorrection()">Appliquer correction</button>
+
+    <div id="oa_result"></div>
+  </section>
+
+  <div id="map"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/mgrs/dist/mgrs.min.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+    }
+  </script>
+
+</body>
+</html>
